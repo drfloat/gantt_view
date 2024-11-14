@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    Copyright 2020 Chintan Ambaliya <chintanambaliya007@gmail.com>
+    License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html).
+-->
+<template>
+    <t t-name="GanttCAView">
+        <div class="o_gantt_ca_view">
+            <div class="o_gantt_ca_view_container"/>
+        </div>
+    </t>
+
+     <div t-name="GanttCAView.buttons">
+        <div class="d-inline-block mr-3">
+            <button class="o_gantt_ca_button_prev btn btn-primary mt-1" title="Previous">
+                <span class="fa fa-arrow-left"/>
+            </button>
+            <button class="o_gantt_ca_button_today btn btn-primary mt-1">
+                Today
+            </button>
+            <button class="o_gantt_ca_button_next btn btn-primary mt-1" title="Next">
+                <span class="fa fa-arrow-right"/>
+            </button>
+        </div>
+        <button t-foreach="allScales" t-as="scale" t-attf-class="o_gantt_ca_button_scale btn btn-secondary mt-1 #{currentScale == scale ? 'active' : ''}" type="button" t-att-data-value="scale">
+            <t t-esc="SCALES[scale].string"/>
+        </button>
+        <div class="dropdown d-inline-block">
+            <button type="button" class="btn btn-outline-primary shadow-none mt-1 o_btn_period" data-toggle="dropdown">Period: 1</button>
+            <div class="dropdown-menu">
+                <a t-foreach="periods" t-as="p" t-attf-class="dropdown-item o_period_item pl-5#{p == 1 ? ' selected' : ''}" t-att-value="p" href="#"><t t-esc="p"/></a>
+            </div>
+        </div>
+    </div>
+
+    <div t-name="gantt-ca-group-title" class="d-flex h-100" style="min-width: 150px; min-height: 30px;">
+        <t t-foreach="widget.columns" t-as="column">
+            <t t-if="column.isDescriptionColumn">
+                <div class="o_description_column d-flex flex-fill align-items-center justify-content-center">
+                    <div class="text-center">
+                        <strong t-esc="column.attrs.string"/>
+                    </div>
+                </div>
+            </t>
+            <t t-else="1">
+                <div t-attf-class="o_column d-flex align-items-center justify-content-center pl-1 o_border_left #{column.attrs.class}"
+                     t-att-style="column.attrs.style or undefined">
+                    <div class="text-center">
+                        <strong t-esc="column.attrs.string"/>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </div>
+
+    <div t-name="gantt-ca-group" class="d-flex h-100" style="min-width: 150px; min-height: 30px;">
+        <t t-foreach="widget.columns" t-as="column">
+            <t t-if="column.isDescriptionColumn">
+                <div class="o_description_column d-flex flex-fill align-items-center pr-1"
+                     t-att-title="record[column.attrs.name].raw_value">
+<!--                    <field t-att-name="column.attrs.name" class="text-truncate"/>-->
+                </div>
+            </t>
+            <t t-elif="!widget.columnsVisibleOnGroup">
+                <div class="o_column d-flex align-items-center justify-content-center pl-1 o_border_left #{column.attrs.class}"
+                     t-att-style="column.attrs.style or undefined">
+                    <field t-att-name="column.attrs.name"/>
+                </div>
+            </t>
+        </t>
+    </div>
+
+    <div t-name="OverallLine" class='o_overall_line'>
+        <div class='arrow-left'/>
+        <div class="o_group_count text-center">
+            <span class="text-white position-absolute" t-esc="group.count" style="font-size: 9px;"/>
+        </div>
+        <div class='arrow-right'/>
+    </div>
+
+    <div t-name="OverallLine-Tooltip">
+        <div><strong t-esc="group.value"/></div>
+        <div><strong>Total: </strong><t t-esc="group.count"/></div>
+    </div>
+
+    <div t-name="GanttCAView.ParentGroup"
+         t-attf-class="o_gantt_ca_group d-flex"
+         style="min-width: 150px; min-height: 50px;"
+         t-att-data-group-id="group.id">
+        <t t-foreach="widget.columns" t-as="column">
+            <t t-if="column.isDescriptionColumn">
+                <div class="o_description_column d-flex flex-fill align-items-center pr-1" t-att-title="group.value">
+                    <i t-attf-class="o_toggle_group fa #{group.isOpen ? 'fa-minus-square' : 'fa-plus-square'} mr-2"/>
+                    <strong class="ml-2"><t t-esc="group.value"/></strong>
+                    <i t-if="widget.groupField" class="ml-2 o_open_group_record fa fa-external-link"/>
+                </div>
+            </t>
+            <t t-else="1">
+                <div t-attf-class="o_column d-flex align-items-center justify-content-center text-center pl-1 o_border_left #{column.attrs.class}"
+                     t-att-style="column.attrs.style or undefined">
+                    <pre class="my-2" t-raw="group.aggregateValues[column.attrs.name]"/>
+                </div>
+            </t>
+        </t>
+    </div>
+
+    <t t-name="FieldColorSelector">
+        <span class="oe_form_field oe_form_field_color_selector" t-att-style="widget.attrs.style">
+            <input type="text"
+               t-att-id="widget.id_for_label"
+               t-att-tabindex="widget.attrs.tabindex"
+               t-att-autofocus="widget.attrs.autofocus"
+               t-att-placeholder="widget.attrs.placeholder"
+               t-att-maxlength="widget.field.size"
+               t-att-value="widget.value or ''"
+               class="o_input"
+               t-if="widget.mode !== 'readonly'"/>
+            <t t-else="">
+                <div t-if="!('readonly_mode' in widget.nodeOptions) or widget.nodeOptions.readonly_mode != 'text'" class="color_box" t-attf-style="background-color: {{widget.value}}" />
+                <span t-if="!('readonly_mode' in widget.nodeOptions) or widget.nodeOptions.readonly_mode != 'color'" class="oe_form_char_content"><t t-esc="widget.value" /></span>
+            </t>
+        </span>
+    </t>
+
+</template>

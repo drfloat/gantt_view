@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    Copyright 2020 Chintan Ambaliya <chintanambaliya007@gmail.com>
+    License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html).
+-->
+<odoo>
+    <template id="assets_backend" name="web_gantt_ca assets" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <!-- SCSS -->
+            <link rel="stylesheet" type="text/scss" href="/web_gantt_ca/static/src/scss/widget.scss"/>
+            <link rel="stylesheet" type="text/scss" href="/web_gantt_ca/static/src/scss/web_gantt_ca.scss"/>
+
+            <!-- JS -->
+            <script type="text/javascript" src="/web_gantt_ca/static/src/js/basic_fields.js"/>
+            <script type="text/javascript" src="/web_gantt_ca/static/src/js/gantt_ca_canvas.js"/>
+            <script type="text/javascript" src="/web_gantt_ca/static/src/js/gantt_ca_view.js"/>
+            <script type="text/javascript" src="/web_gantt_ca/static/src/js/gantt_ca_renderer.js"/>
+            <script type="text/javascript" src="/web_gantt_ca/static/src/js/gantt_ca_controller.js"/>
+            <script type="text/javascript" src="/web_gantt_ca/static/src/js/gantt_ca_model.js"/>
+        </xpath>
+    </template>
+</odoo>

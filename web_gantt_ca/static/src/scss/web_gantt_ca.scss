@@ -1,0 +1,236 @@
+/**
+ * Copyright 2020 Chintan Ambaliya <chintanambaliya007@gmail.com>
+ * License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
+ */
+
+$vis-weekend-background-color: #dcdcdc;
+$vis-item-content-padding: 0;
+
+.o_gantt_ca_view {
+	position: relative;
+	display: block;
+	height: 100%;
+	background-color: #ffffff;
+
+	.vis-timeline {
+		.vis-grid {
+			//&.vis-vertical {
+			//	border-color: #f0f0f0;
+			//}
+			&.vis-saturday,
+			&.vis-sunday {
+				background: $vis-weekend-background-color;
+				z-index: 1;
+				opacity: 0.7;
+				pointer-events: none;
+			}
+
+			&.vis-today {
+				//background: #4a64712e;
+			}
+		}
+
+		//.vis-foreground {
+		//	.vis-group {
+		//		border-bottom: 1px solid #f0f0f0;
+		//	}
+		//}
+		.o_overall_line {
+			background-color: #4a6471;
+			height: 10px;
+			display: block;
+			position: relative;
+
+			.arrow-right {
+				width: 0;
+				height: 0;
+				border-top: 10px solid transparent;
+				border-bottom: 5px solid transparent;
+				border-left: 5px solid #4a6471;
+				float: left;
+			}
+
+			.arrow-left {
+				width: 0;
+				height: 0;
+				border-top: 10px solid transparent;
+				border-bottom: 5px solid transparent;
+				border-right: 5px solid #4a6471;
+				float: right;
+			}
+		}
+
+		.o_open_group_record {
+			cursor: pointer;
+		}
+
+		.vis-label.vis-nesting-group.expanded:before,
+		.vis-label.vis-nesting-group.collapsed:before {
+			display: none;
+		}
+
+		.vis-labelset .vis-label .vis-inner {
+			padding-top: 0;
+			padding-bottom: 0;
+			width: 100%;
+		}
+
+		.vis-label.vis-nesting-group {
+			.vis-inner {
+				display: block;
+
+				> * {
+					&.vis-group-collapsed:before {
+						content: "\25BC";
+					}
+
+					&.vis-group-expended:before {
+						content: "\25B6";
+					}
+				}
+			}
+		}
+
+		.vis-item {
+			&.vis-box:hover {
+				cursor: pointer !important;
+			}
+
+			&.vis-item-overflow {
+				overflow: visible;
+			}
+
+			.vis-item-content {
+				width: 100%;
+				padding: $vis-item-content-padding;
+				display: block;
+				height: 100%;
+			}
+		}
+
+		.vis-top-title {
+			padding: 0 5px;
+		}
+
+		.vis-current-time {
+			width: 5px;
+		}
+
+		.vis-highlight-border {
+			&::before {
+				position: absolute;
+				content: '';
+				height: 100%;
+				width: 100%;
+				//border: 2px solid #000000;
+				opacity: 0.5;
+				animation: border-dance 1.5s infinite linear;
+				box-shadow: inset 0 0 30px 1px gold;
+			}
+		}
+
+		@keyframes border-dance {
+			0% {
+				opacity: 0.5;
+			}
+			50% {
+				opacity: 1;
+			}
+			100% {
+				opacity: 0.5;
+			}
+		}
+
+		.vis-moving-path {
+			stroke-dasharray: 5;
+			animation: dash 500ms infinite linear;
+		}
+
+		@keyframes dash {
+			from {
+				stroke-dashoffset: 10;
+			}
+		}
+
+		//.o_external_link {
+		//	position: relative;
+		//	padding-right: 17px;
+		//	&::before {
+		//		font: normal normal normal 14px/1 FontAwesome;
+		//		position: absolute;
+		//		content: "\f14c";
+		//		right: 0;
+		//		cursor: pointer;
+		//	}
+		//}
+
+		.vis-tooltip {
+			border: 0;
+			background: #ffffff;
+		}
+
+		.o_border_left {
+			border-left: 1px solid #bfbfbf;
+		}
+
+		.o_description_column {
+			width: 200px;
+		}
+
+		.o_decoration {
+			background-image: repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0) 0 10px, rgba(255, 255, 255, 0.7) 10px 20px);
+		}
+
+		.o_column {
+			width: 75px;
+		}
+
+		.progress-wrapper {
+			background: white;
+			width: 100%;
+			height: 18px;
+			text-align: center;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.progress {
+			height: 100%;
+			width: 60%;
+			position: absolute;
+			left: 0px;
+			top: 0px;
+			background: #63ed63;
+		}
+
+		.progress-label {
+			position: absolute;
+			z-index: 1;
+		}
+	}
+
+	.oe_timeline_view_canvas {
+		pointer-events: none;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+
+	&.loading {
+		position: relative;
+
+		&::after {
+			position: absolute;
+			content: url(/web_gantt_ca/static/src/img/loading.gif);
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			z-index: 2;
+			padding: 100px calc(50% - 50px);
+			background: white;
+		}
+	}
+}
